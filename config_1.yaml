@@ -1,0 +1,10 @@
+# bedzie tak i jak komus sie nie podoba to niech zmieni, elo
+rg_name: wus-lab-1-config-1-rg
+vms:
+  - {name: vm-1-db-master, IP: 10.0.0.4}
+  - {name: vm-2-backend, IP: 10.0.0.5}
+  - {name: vm-3-frontend, IP: 10.0.0.6}
+components:
+  - {type: db, port: 3306, vm: vm-1-db-master}
+  - {type: backend, port: 8000, vm: vm-2-backend}
+  - {type: frontend, port: 8000, vm: vm-3-frontend}
