@@ -36,21 +36,21 @@ do
 
 
     if [ ${!type} == "db_master" ]; then
-        ./database.sh $vm_name $rg_name $port
+        ./database.sh ${!vm_name} $rg_name $port
     fi
 
     if [ ${!type} == "backend" ]; then
         db_vm_name=${VM}_related_1
-        db_ip=$("vms_${!db_vm_name}_IP")
-        db_port=$("vms_${!db_vm_name}_port")
-        ./backend.sh $vm_name $rg_name $db_ip $db_port
+        db_ip=vms_${!db_vm_name}_IP
+        db_port=vms_${!db_vm_name}_port
+        ./backend.sh ${!vm_name} $rg_name ${!db_ip} ${!db_port}
     fi
 
     if [ ${!type} == "frontend" ]; then
         backend_vm_name=${VM}_related_1
-        backend_ip=$("vms_${!backend_vm_name}_IP")
-        backend_port=$("vms_${!backend_vm_name}_port")
-        ./frontend.sh $vm_name $rg_name $backend_ip $backend_port
+        backend_ip=vms_${!backend_vm_name}_IP
+        backend_port=vms_${!backend_vm_name}_port
+        ./frontend.sh ${!vm_name} $rg_name ${!backend_ip} ${!backend_port}
     fi
 
 done
