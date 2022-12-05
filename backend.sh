@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 name=$1
 resource_group=$2

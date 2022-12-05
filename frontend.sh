@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 name=$1
 resource_group=$2
@@ -6,8 +6,8 @@ backend_ip=$3
 backend_port=$4
 
 az vm run-command invoke --command-id RunShellScript \
-                         --name wus-lab1-frontend \
-                         --resource-group wus-lab1-rg \
+                         --name $name \
+                         --resource-group $resource_group \
                          --scripts '
 sudo apt update;
 sudo apt upgrade -y;

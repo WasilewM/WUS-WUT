@@ -1,12 +1,12 @@
-#!/bin/sh
+#!/bin/bash
 
 name=$1
 resource_group=$2
 port=$3
 
 az vm run-command invoke --command-id RunShellScript \
-                         --name wus-lab1-db \
-                         --resource-group wus-lab1-rg \
+                         --name $name \
+                         --resource-group $resource_group \
                          --scripts 'cd /root;
 sudo apt update;
 sudo apt upgrade -y;
