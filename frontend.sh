@@ -1,5 +1,10 @@
 #!/bin/sh
 
+name=$1
+resource_group=$2
+backend_ip=$3
+backend_port=$4
+
 az vm run-command invoke --command-id RunShellScript \
                          --name wus-lab1-frontend \
                          --resource-group wus-lab1-rg \
@@ -15,6 +20,8 @@ export NVM_DIR="$HOME/.nvm";
 nvm install 16;
 git clone https://github.com/spring-petclinic/spring-petclinic-angular;
 cd spring-petclinic-angular;
+sed -i "s/localhost/'$backend_ip'/g" src/environments/environment.prod.ts src/environments/environment.ts; 
+sed -i "s/9966/'$backend_port'/g" src/environments/environment.prod.ts src/environments/environment.ts; 
 npm install;
 npm install -g angular-http-server;
 npm run build -- --prod;
