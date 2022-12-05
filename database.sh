@@ -18,11 +18,11 @@ echo 'server-id = 1' | sudo tee -a /etc/mysql/my.cnf;
 echo 'log_bin = /var/log/mysql/mysql-bin.log' | sudo tee -a /etc/mysql/my.cnf;
 echo 'binlog_do_db = petclinic' | sudo tee -a /etc/mysql/my.cnf;
 
-sudo mysql -e '\"'CREATE DATABASE IF NOT EXISTS petclinic;
+sudo mysql -e "\""CREATE DATABASE IF NOT EXISTS petclinic;
     ALTER DATABASE petclinic
       DEFAULT CHARACTER SET utf8
       DEFAULT COLLATE utf8_general_ci;
     CREATE USER IF NOT EXISTS 'pc'@'%' IDENTIFIED BY 'petclinic';
-    GRANT ALL PRIVILEGES ON petclinic.* TO 'pc'@'%''\"';
+    GRANT ALL PRIVILEGES ON petclinic.* TO 'pc'@'%'"\"";
 
 sudo service mysql restart;"
