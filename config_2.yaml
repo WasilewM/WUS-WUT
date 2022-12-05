@@ -1,0 +1,15 @@
+rg_name: wus-lab-1-config-2-rg
+vms:
+  - {name: vm-1-db-master, IP: 10.0.0.4}
+  - {name: vm-2-backend, IP: 10.0.0.5}
+  - {name: vm-3-backend, IP: 10.0.0.6}
+  - {name: vm-4-backend, IP: 10.0.0.7}
+  - {name: vm-5-load-balancer, IP: 10.0.0.8}
+  - {name: vm-6-frontend, IP: 10.0.0.9}
+components:
+  - {type: db-master, port: 3306, vm: vm-1-db-master}
+  - {type: backend, port: 8000, vm: vm-2-backend}
+  - {type: backend, port: 8000, vm: vm-3-backend}
+  - {type: backend, port: 8000, vm: vm-4-backend}
+  - {type: load-balancer, port: 8000, vm: vm-5-backend}
+  - {type: frontend, port: 3306, vm: vm-6-frontend}
