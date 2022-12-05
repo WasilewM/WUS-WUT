@@ -43,7 +43,7 @@ do
         db_vm_name=${VM}_related_1
         db_ip=vms_${!db_vm_name}_IP
         db_port=vms_${!db_vm_name}_port
-        ./backend.sh ${!vm_name} $rg_name ${!db_ip} ${!db_port}
+        ./backend.sh ${!vm_name} $rg_name ${!port} ${!db_ip} ${!db_port}
     fi
 
     if [ ${!type} == "frontend" ]; then
