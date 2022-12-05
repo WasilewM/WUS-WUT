@@ -1,5 +1,5 @@
 # bedzie tak i jak komus sie nie podoba to niech zmieni, elo
-rg_name: wus-lab-1-config-1-rg
+rg_name: config-1-rg
 vms:
   - {name: vm-1-db-master, IP: 10.0.0.4}
   - {name: vm-2-backend, IP: 10.0.0.5}
