@@ -56,7 +56,7 @@ vms:
   db_master:
     type: "db_master"
     subnet: "subnet-1-db"
-    public_ip: " "
+    public_ip: ""
     name: "vm-1-db-master"
     IP: "10.0.1.20"
     port: 3306
