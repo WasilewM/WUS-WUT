@@ -48,10 +48,10 @@ for group in $network_sec_groups_; do
         --access ${!rule_access} \
         --protocol ${!rule_protocol} \
         --priority ${!rule_priority} \
-        --source-address-prefix ${!rule_src_addr_pref} \
-        --source-port-range ${!rule_src_port_ranges} \
-        --destination-address-prefix ${!rule_dst_addr_pref} \
-        --destination-port-range ${!rule_dst_port_ranges}
+        --source-address-prefix "${!rule_src_addr_pref}" \
+        --source-port-range "${!rule_src_port_ranges}" \
+        --destination-address-prefix "${!rule_dst_addr_pref}" \
+        --destination-port-range "${!rule_dst_port_ranges}"
     
 done
 
