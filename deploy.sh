@@ -85,7 +85,7 @@ done
 for VM in $vms_
 do
     type=${VM}_type
-    vm_name=${VM}_name
+    name=${VM}_name
     IP=${VM}_IP
     port=${VM}_port
 
@@ -93,7 +93,7 @@ do
     if [ ${!type} == "db_master" ]; then
         az vm run-command invoke \
             --command-id RunShellScript \
-            --name ${!vm_name} \
+            --name ${!name} \
             --resource-group $rg_name \
             --scripts "@.database.sh" \
             --parameters ${!port}
@@ -103,16 +103,26 @@ do
         db_vm_name=${VM}_related_1
         db_ip=vms_${!db_vm_name}_IP
         db_port=vms_${!db_vm_name}_port
-        ./backend.sh ${!vm_name} $rg_name ${!port} ${!db_ip} ${!db_port}
+        az vm run-command invoke \
+            --command-id RunShellScript \
+            --name ${!name} \
+            --resource-group $rg_name \
+            --scripts "@.backend.sh" \
+            --parameters ${!port} ${!db_ip} ${!db_port}
     fi
+
 
     if [ ${!type} == "frontend" ]; then
         backend_vm_name=${VM}_related_1
-        backend_ip=vms_${!backend_vm_name}_IP
+        backend_public_ip_name=${!backend_vm_name}_public_ip
+        backend_ip=$(az network public-ip show --resource-group $rg_name --name ${!backend_public_ip_name} --query "ipAddress" --output tsv)
         backend_port=vms_${!backend_vm_name}_port
-        ./frontend.sh ${!vm_name} $rg_name ${!backend_ip} ${!backend_port}
+        
+        az vm run-command invoke \
+            --command-id RunShellScript \
+            --name ${!name} \
+            --resource-group $rg_name \
+            --scripts "@.frontend.sh" \
+            --parameters ${!backend_ip} ${!backend_port}
     fi
-
 done
-
-
