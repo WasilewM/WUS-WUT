@@ -74,7 +74,7 @@ for IP in $public_ips_
 do
     echo "creating public IP (${!IP})"
     az network public-ip create \
-        --resource_group $rg_name \
+        --resource-group $rg_name \
         --name ${!IP}
 done
 
@@ -97,7 +97,7 @@ do
         --vnet-name network \
         --subnet ${!subnet} \
         --private-ip-address ${!IP} \
-        --public-ip-address ${!public_ip}
+        --public-ip-address "${!public_ip}"
 done
 
 for VM in $vms_
