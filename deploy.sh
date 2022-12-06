@@ -114,7 +114,7 @@ do
             --command-id RunShellScript \
             --name ${!name} \
             --resource-group $rg_name \
-            --scripts "@.database.sh" \
+            --scripts "@./database.sh" \
             --parameters ${!port}
     fi
 
@@ -126,7 +126,7 @@ do
             --command-id RunShellScript \
             --name ${!name} \
             --resource-group $rg_name \
-            --scripts "@.backend.sh" \
+            --scripts "@./backend.sh" \
             --parameters ${!port} ${!db_ip} ${!db_port}
     fi
 
@@ -141,7 +141,7 @@ do
             --command-id RunShellScript \
             --name ${!name} \
             --resource-group $rg_name \
-            --scripts "@.frontend.sh" \
+            --scripts "@./frontend.sh" \
             --parameters ${!backend_ip} ${!backend_port}
     fi
 done
