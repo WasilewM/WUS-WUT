@@ -10,21 +10,76 @@ az group create --location westeurope --name $rg_name
 az network vnet create \
   --name network \
   --resource-group $rg_name \
-  --subnet-name subnet \
   --address-prefix 10.0.0.0/16
+
+for group in $network_sec_groups_; do
+    name=${group}_name
+    rule_name=${group}_rule_name
+    rule_access=${group}_rule_access
+    rule_protocol=${group}_rule_protocol
+    rule_priority=${group}_rule_priority
+    rule_src_addr_pref=${group}_rule_src_addr_pref
+    rule_src_port_ranges=${group}_rule_src_port_ranges
+    rule_dst_addr_pref=${group}_rule_dst_addr_pref
+    rule_dst_port_ranges=${group}_rule_dst_port_ranges
+
+    az network nsg create \
+        --resource-group $rg_name \
+        --name ${!name}
+        
+    az network nsg rule create \
+        --resource-group $rg_name \
+        --nsg-name ${!name} \
+        --name ${!rule_name} \
+        --access ${!rule_access} \
+        --protocol ${!rule_protocol} \
+        --priority ${!rule_priority} \
+        --source-address-prefix ${!rule_src_addr_pref} \
+        --source-port-range ${!rule_src_port_ranges} \
+        --destination-address-prefix ${!rule_dst_addr_pref} \
+        --destination-port-range ${!rule_dst_port_ranges}
+done
+
+for subnet in $subnets_; do
+    name=${subnet}_name
+    addr_pref=${subnet}_addr_pref
+    nsg=${subnet}_nsg
+
+    az network vnet subnet create \
+        --resource-group $rg_name \
+        --vnet-name network \
+        --name ${!name} \
+        --address-prefix ${!addr_pref} \
+        --network-security-group ${!nsg}
+done
+
+
+for IP in $public_ips_
+do
+    az network public-ip create \
+        --resource_group $rg_name \
+        --name ${!IP}
+done
+
 
 for VM in $vms_
 do
+    type=${VM}_type
+    subnet=${VM}_subnet
+    public_ip=${VM}_public_ip
     name=${VM}_name
     IP=${VM}_IP
+    port=${VM}_port
+
     az vm create \
         --name ${!name} \
         --resource-group $rg_name \
         --image Canonical:0001-com-ubuntu-server-jammy-daily:22_04-daily-lts-gen2:22.04.202211100 \
         --generate-ssh-keys \
         --vnet-name network \
-        --subnet subnet \
-        --private-ip-address ${!IP} 
+        --subnet ${!subnet} \
+        --private-ip-address ${!IP} \
+        --public-ip-address ${!public_ip}
 done
 
 for VM in $vms_
@@ -36,7 +91,12 @@ do
 
 
     if [ ${!type} == "db_master" ]; then
-        ./database.sh ${!vm_name} $rg_name $port
+        az vm run-command invoke \
+            --command-id RunShellScript \
+            --name ${!vm_name} \
+            --resource-group $rg_name \
+            --scripts "@.database.sh" \
+            --parameters ${!port}
     fi
 
     if [ ${!type} == "backend" ]; then
@@ -54,3 +114,5 @@ do
     fi
 
 done
+
+

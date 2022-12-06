@@ -1,12 +1,40 @@
 rg_name: config-1-rg
+network_sec_groups:
+  nsg1db:
+    name: nsg-1-db
+    rule:
+      name: nsg-db
+      access: allow
+      protocol: Tcp
+      priority: 1000
+      src_addr_pref: 10.0.0.0/16
+      src_port_ranges: *
+      dst_addr_pref: *
+      dst_port_ranges: 3306
+
+subnets:
+  subnet:
+    name: subnet-1-db
+    addr_pref: 10.0.1.0/24
+    nsg: nsg-1-db
+
+public_ips:
+  - backend_ip
+  - frontend_ip
+
+
 vms:
   db_master:
     type: db_master
+    subnet: subnet-1-db
+    public_ip: " "
     name: "vm-1-db-master"
     IP: "10.0.0.4"
     port: 3306
   backend:
     type: backend
+    subnet: subnet-1-db
+    public_ip: "backend_ip"
     name: "vm-2-backend" 
     IP: "10.0.0.5"
     port: 8001
@@ -14,6 +42,7 @@ vms:
       - db_master
   frontend:
     type: frontend
+    subnet: subnet-1-db
     name: "vm-3-frontend"
     IP: "10.0.0.6"
     port: 8000
