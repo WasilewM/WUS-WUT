@@ -23,10 +23,12 @@ for group in $network_sec_groups_; do
     rule_dst_addr_pref=${group}_rule_dst_addr_pref
     rule_dst_port_ranges=${group}_rule_dst_port_ranges
 
+    echo "creating network security group ${!name}"
     az network nsg create \
         --resource-group $rg_name \
         --name ${!name}
-        
+    
+    echo "creating network security group rule ${!name}"
     az network nsg rule create \
         --resource-group $rg_name \
         --nsg-name ${!name} \
@@ -45,6 +47,7 @@ for subnet in $subnets_; do
     addr_pref=${subnet}_addr_pref
     nsg=${subnet}_nsg
 
+    echo "creating network subnet ${!name}"
     az network vnet subnet create \
         --resource-group $rg_name \
         --vnet-name network \
@@ -56,6 +59,7 @@ done
 
 for IP in $public_ips_
 do
+    echo "creating public IP (${!IP})"
     az network public-ip create \
         --resource_group $rg_name \
         --name ${!IP}
@@ -70,7 +74,8 @@ do
     name=${VM}_name
     IP=${VM}_IP
     port=${VM}_port
-
+    
+    echo "creating VM ${!name}"
     az vm create \
         --name ${!name} \
         --resource-group $rg_name \
@@ -89,6 +94,7 @@ do
     IP=${VM}_IP
     port=${VM}_port
 
+    echo "deploying ${!name}"
 
     if [ ${!type} == "db_master" ]; then
         az vm run-command invoke \
