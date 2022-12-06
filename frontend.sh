@@ -8,7 +8,7 @@ backend_port=$4
 az vm run-command invoke --command-id RunShellScript \
                          --name $name \
                          --resource-group $resource_group \
-                         --scripts '
+                         --scripts 'cd /root;
 sudo apt update;
 sudo apt upgrade -y;
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash;
