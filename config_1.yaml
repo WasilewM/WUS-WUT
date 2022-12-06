@@ -11,17 +11,46 @@ network_sec_groups:
       src_port_ranges: *
       dst_addr_pref: *
       dst_port_ranges: 3306
+  nsg2backend:
+    name: nsg-2-backend
+    rule:
+      name: nsg-backend
+      access: allow
+      protocol: Tcp
+      priority: 1000
+      src_addr_pref: *
+      src_port_ranges: *
+      dst_addr_pref: *
+      dst_port_ranges: 8080
+  nsg3frontend:
+    name: nsg-3-frontend
+    rule:
+      name: nsg-frontend
+      access: allow
+      protocol: Tcp
+      priority: 1000
+      src_addr_pref: *
+      src_port_ranges: *
+      dst_addr_pref: *
+      dst_port_ranges: 8080
 
 subnets:
-  subnet:
+  subnet1db:
     name: subnet-1-db
     addr_pref: 10.0.1.0/24
     nsg: nsg-1-db
+  subnet2backend:
+    name: subnet-2-backend
+    addr_pref: 10.0.2.0/24
+    nsg: nsg-2-backend
+  subnet3frontend:
+    name: subnet-3-frontend
+    addr_pref: 10.0.3.0/24
+    nsg: nsg-2-backend
 
 public_ips:
   - backend_ip
   - frontend_ip
-
 
 vms:
   db_master:
@@ -29,22 +58,22 @@ vms:
     subnet: subnet-1-db
     public_ip: " "
     name: "vm-1-db-master"
-    IP: "10.0.0.4"
+    IP: "10.0.1.1"
     port: 3306
   backend:
     type: backend
-    subnet: subnet-1-db
+    subnet: subnet-2-backend
     public_ip: "backend_ip"
     name: "vm-2-backend" 
-    IP: "10.0.0.5"
+    IP: "10.0.2.1"
     port: 8001
     related:
       - db_master
   frontend:
     type: frontend
-    subnet: subnet-1-db
+    subnet: subnet-3-frontend
     name: "vm-3-frontend"
-    IP: "10.0.0.6"
+    IP: "10.0.3.1"
     port: 8000
     related: 
       - backend
