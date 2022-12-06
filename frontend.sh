@@ -2,6 +2,7 @@
 
 backend_ip=$1
 backend_port=$2
+frontend_port=$3
 
 cd /root
 sudo apt update
@@ -20,4 +21,4 @@ sed -i "s/9966/$backend_port/g" src/environments/environment.prod.ts src/environ
 npm install
 npm install -g angular-http-server
 npm run build -- --prod
-nohup npx angular-http-server --path ./dist -p 8000 > angular.out 2> angular.err &
+nohup npx angular-http-server --path ./dist -p $frontend_port > angular.out 2> angular.err &

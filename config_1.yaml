@@ -21,7 +21,7 @@ network_sec_groups:
       src_addr_pref: "*"
       src_port_ranges: "*"
       dst_addr_pref: "*"
-      dst_port_ranges: 8080
+      dst_port_ranges: 8100
   nsg3frontend:
     name: "nsg-3-frontend"
     rule:
@@ -32,7 +32,7 @@ network_sec_groups:
       src_addr_pref: "*"
       src_port_ranges: "*"
       dst_addr_pref: "*"
-      dst_port_ranges: 8080
+      dst_port_ranges: 8000
 
 subnets:
   subnet1db:
@@ -46,7 +46,7 @@ subnets:
   subnet3frontend:
     name: "subnet-3-frontend"
     addr_pref: "10.0.3.0/24"
-    nsg: "nsg-2-backend"
+    nsg: "nsg-3-frontend"
 
 public_ips:
   - backend_ip
@@ -66,7 +66,7 @@ vms:
     public_ip: "backend_ip"
     name: "vm-2-backend" 
     IP: "10.0.2.20"
-    port: 8001
+    port: 8100
     related:
       - db_master
   frontend:

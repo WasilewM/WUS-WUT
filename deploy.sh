@@ -136,12 +136,13 @@ do
         backend_public_ip_name=vms_${!backend_vm_name}_public_ip
         backend_ip=$(az network public-ip show --resource-group $rg_name --name ${!backend_public_ip_name} --query "ipAddress" --output tsv)
         backend_port=vms_${!backend_vm_name}_port
+        frontend_port=${VM}_port
         
         az vm run-command invoke \
             --command-id RunShellScript \
             --name ${!name} \
             --resource-group $rg_name \
             --scripts "@./frontend.sh" \
-            --parameters ${!backend_ip} ${!backend_port}
+            --parameters ${!backend_ip} ${!backend_port} ${!frontend_port}
     fi
 done
