@@ -133,7 +133,7 @@ do
 
     if [ ${!type} == "frontend" ]; then
         backend_vm_name=${VM}_related_1
-        backend_public_ip_name=${!backend_vm_name}_public_ip
+        backend_public_ip_name=vms_${!backend_vm_name}_public_ip
         backend_ip=$(az network public-ip show --resource-group $rg_name --name ${!backend_public_ip_name} --query "ipAddress" --output tsv)
         backend_port=vms_${!backend_vm_name}_port
         
