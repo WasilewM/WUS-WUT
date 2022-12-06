@@ -29,6 +29,18 @@ for group in $network_sec_groups_; do
         --name ${!name}
     
     echo "creating network security group rule ${!name}"
+    echo "az network nsg rule create \
+        --resource-group $rg_name \
+        --nsg-name ${!name} \
+        --name ${!rule_name} \
+        --access ${!rule_access} \
+        --protocol ${!rule_protocol} \
+        --priority ${!rule_priority} \
+        --source-address-prefix ${!rule_src_addr_pref} \
+        --source-port-range ${!rule_src_port_ranges} \
+        --destination-address-prefix ${!rule_dst_addr_pref} \
+        --destination-port-range ${!rule_dst_port_ranges}"
+    
     az network nsg rule create \
         --resource-group $rg_name \
         --nsg-name ${!name} \
@@ -40,6 +52,7 @@ for group in $network_sec_groups_; do
         --source-port-range ${!rule_src_port_ranges} \
         --destination-address-prefix ${!rule_dst_addr_pref} \
         --destination-port-range ${!rule_dst_port_ranges}
+    
 done
 
 for subnet in $subnets_; do
