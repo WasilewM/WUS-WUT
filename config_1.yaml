@@ -72,6 +72,7 @@ vms:
   frontend:
     type: "frontend"
     subnet: "subnet-3-frontend"
+    public_ip: "frontend_ip"
     name: "vm-3-frontend"
     IP: "10.0.3.20"
     port: 8000
