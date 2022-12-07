@@ -30,17 +30,16 @@ for group in $network_sec_groups_; do
     
     echo "creating network security group rule ${!name}"
     echo "az network nsg rule create \
-        --resource-group $rg_name \
-        --nsg-name ${!name} \
-        --name ${!rule_name} \
-        --access ${!rule_access} \
-        --protocol ${!rule_protocol} \
-        --priority ${!rule_priority} \
-        --source-address-prefix ${!rule_src_addr_pref} \
-        --source-port-range ${!rule_src_port_ranges} \
-        --destination-address-prefix ${!rule_dst_addr_pref} \
-        --destination-port-range ${!rule_dst_port_ranges}"
-    
+    --resource-group $rg_name \
+    --nsg-name ${!name} \
+    --name ${!rule_name} \
+    --access ${!rule_access} \
+    --protocol ${!rule_protocol} \
+    --priority ${!rule_priority} \
+    --source-address-prefix ${!rule_src_addr_pref} \
+    --source-port-range ${!rule_src_port_ranges} \
+    --destination-address-prefix ${!rule_dst_addr_pref} \
+    --destination-port-range ${!rule_dst_port_ranges}"
     az network nsg rule create \
         --resource-group $rg_name \
         --nsg-name ${!name} \
@@ -83,12 +82,14 @@ for VM in $vms_
 do
     type=${VM}_type
     subnet=${VM}_subnet
+    nsg=${VM}_nsg
     public_ip=${VM}_public_ip
     name=${VM}_name
     IP=${VM}_IP
     port=${VM}_port
-    
+
     echo "creating VM ${!name}"
+
     az vm create \
         --name ${!name} \
         --resource-group $rg_name \
@@ -96,6 +97,7 @@ do
         --generate-ssh-keys \
         --vnet-name network \
         --subnet ${!subnet} \
+        --nsg ${!nsg} \
         --private-ip-address ${!IP} \
         --public-ip-address "${!public_ip}"
 done
