@@ -76,7 +76,7 @@ vms:
     nsg: "nsg-1-db"
     public_ip: ""
     name: "vm-4-db-slave"
-    IP: "10.0.4.20"
+    IP: "10.0.1.25"
 
 components:
   db_master:
