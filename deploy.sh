@@ -142,6 +142,6 @@ do
             --name ${!name} \
             --resource-group $rg_name \
             --scripts "@./frontend.sh" \
-            --parameters ${!backend_ip} ${!backend_port}
+            --parameters ${backend_ip} ${!backend_port}
     fi
 done
