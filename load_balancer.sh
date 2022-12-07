@@ -15,7 +15,7 @@ sudo apt install -y nginx
 
 cat << EOF > /etc/nginx/sites-enabled/lb
 http {
-    upstream http://$MY_IP {
+    upstream $MY_IP {
         server $SERVER_1_IP:$SERVER_1_PORT;
         server $SERVER_2_IP:$SERVER_2_PORT;
         server $SERVER_3_IP:$SERVER_3_PORT;
