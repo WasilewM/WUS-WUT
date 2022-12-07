@@ -114,4 +114,4 @@ components:
     vm_name: "vm-4-db-slave"
     port: 3307
     related: 
-      - db_master
+      - {component: db_master, vm: db_master}
