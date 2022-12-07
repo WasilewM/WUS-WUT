@@ -1,4 +1,4 @@
-rg_name: config-1-rg
+rg_name: wus-lab-1-config-1-rg
 network_sec_groups:
   nsg1db:
     name: "nsg-1-db"

@@ -1,15 +1,110 @@
 rg_name: wus-lab-1-config-2-rg
+rg_name: config-1-rg
+network_sec_groups:
+  nsg1db:
+    name: "nsg-1-db"
+    rule:
+      name: "nsg-db"
+      access: "allow"
+      protocol: "Tcp"
+      priority: 1000
+      src_addr_pref: "10.0.0.0/16"
+      src_port_ranges: "*"
+      dst_addr_pref: "*"
+      dst_port_ranges: 3306
+  nsg2backend:
+    name: "nsg-2-backend"
+    rule:
+      name: "nsg-backend"
+      access: "allow"
+      protocol: "Tcp"
+      priority: 1000
+      src_addr_pref: "*"
+      src_port_ranges: "*"
+      dst_addr_pref: "*"
+      dst_port_ranges: "8100-8102"
+  nsg3frontend:
+    name: "nsg-3-frontend"
+    rule:
+      name: "nsg-frontend"
+      access: "allow"
+      protocol: "Tcp"
+      priority: 1000
+      src_addr_pref: "*"
+      src_port_ranges: "*"
+      dst_addr_pref: "*"
+      dst_port_ranges: "22-8001"
+
+subnets:
+  subnet1db:
+    name: "subnet-1-db"
+    addr_pref: "10.0.1.0/24"
+    nsg: "nsg-1-db"
+  subnet2backend:
+    name: "subnet-2-backend"
+    addr_pref: "10.0.2.0/24"
+    nsg: "nsg-2-backend"
+  subnet3frontend:
+    name: "subnet-3-frontend"
+    addr_pref: "10.0.3.0/24"
+    nsg: "nsg-3-frontend"
+
+public_ips:
+  - load_balancer_ip
+  - frontend_ip
+
 vms:
-  - {name: vm-1-db-master, IP: 10.0.0.4}
-  - {name: vm-2-backend, IP: 10.0.0.5}
-  - {name: vm-3-backend, IP: 10.0.0.6}
-  - {name: vm-4-backend, IP: 10.0.0.7}
-  - {name: vm-5-load-balancer, IP: 10.0.0.8}
-  - {name: vm-6-frontend, IP: 10.0.0.9}
-components:
-  - {type: db-master, port: 3306, vm: vm-1-db-master}
-  - {type: backend, port: 8000, vm: vm-2-backend}
-  - {type: backend, port: 8000, vm: vm-3-backend}
-  - {type: backend, port: 8000, vm: vm-4-backend}
-  - {type: load-balancer, port: 8000, vm: vm-5-backend}
-  - {type: frontend, port: 3306, vm: vm-6-frontend}
+  db_master:
+    type: "db_master"
+    subnet: "subnet-1-db"
+    public_ip: ""
+    name: "vm-1-db-master"
+    IP: "10.0.1.20"
+    port: 3306
+  backend_1:
+    type: "backend"
+    subnet: "subnet-2-backend"
+    public_ip: "backend_ip"
+    name: "vm-2-backend-1" 
+    IP: "10.0.2.20"
+    port: 8100
+    related:
+      - db_master
+  backend_2:
+    type: "backend"
+    subnet: "subnet-2-backend"
+    public_ip: "backend_ip"
+    name: "vm-3-backend-2" 
+    IP: "10.0.2.21"
+    port: 8101
+    related:
+      - db_master
+  backend_3:
+    type: "backend"
+    subnet: "subnet-2-backend"
+    public_ip: "backend_ip"
+    name: "vm-4-backend-3" 
+    IP: "10.0.2.22"
+    port: 8102
+    related:
+      - db_master
+  load_balancer:
+    type: "load-balancer"
+    subnet: "subnet-3-frontend"
+    public_ip: "load_balancer_ip"
+    name: "vm-5-load-balancer"
+    IP: "10.0.3.21"
+    port: 8001
+    related:
+      - backend_1
+      - backend_2
+      - backend_3
+  frontend:
+    type: "frontend"
+    subnet: "subnet-3-frontend"
+    public_ip: "frontend_ip"
+    name: "vm-6-frontend"
+    IP: "10.0.3.20"
+    port: 8000
+    related: 
+      - load_balancer

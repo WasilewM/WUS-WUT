@@ -132,6 +132,28 @@ do
             --parameters ${!port} ${!db_ip} ${!db_port}
     fi
 
+    if [ ${!type} == "load_balancer" ]; then
+        my_port=${VM}_port
+        
+        backend_1_vm_name=${VM}_related_1
+        backend_1_ip=vms_${!backend_1_vm_name}_IP
+        backend_1_port=vms_${!backend_vm_name}_port
+
+        backend_2_vm_name=${VM}_related_2
+        backend_2_ip=vms_${!backend_1_vm_name}_IP
+        backend_2_port=vms_${!backend_vm_name}_port
+
+        backend_3_vm_name=${VM}_related_3
+        backend_3_ip=vms_${!backend_1_vm_name}_IP
+        backend_3_port=vms_${!backend_vm_name}_port
+
+        az vm run-command invoke \
+            --command-id RunShellScript \
+            --name ${!name} \
+            --resource-group $rg_name \
+            --scripts "@./load_balancer.sh" \
+            --parameters ${!my_port} ${!backend_1_ip} ${!backend_1_port} ${!backend_2_ip} ${!backend_2_port} ${!backend_3_ip} ${!backend_3_port}
+    fi
 
     if [ ${!type} == "frontend" ]; then
         backend_vm_name=${VM}_related_1
