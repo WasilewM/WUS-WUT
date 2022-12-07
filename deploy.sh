@@ -103,7 +103,7 @@ done
 for component in $components_
 do
     type=${component}_type
-    name=${component}_name
+    vm_name=${component}_vm_name
     IP=${component}_IP
     port=${component}_port
 
@@ -112,7 +112,7 @@ do
     if [ ${!type} == "db_master" ]; then
         az vm run-command invoke \
             --command-id RunShellScript \
-            --name ${!name} \
+            --name ${!vm_name} \
             --resource-group $rg_name \
             --scripts "@./database.sh" \
             --parameters ${!port}
@@ -124,7 +124,7 @@ do
         db_port=vms_${!db_vm_name}_port
         az vm run-command invoke \
             --command-id RunShellScript \
-            --name ${!name} \
+            --name ${!vm_name} \
             --resource-group $rg_name \
             --scripts "@./backend.sh" \
             --parameters ${!port} ${!db_ip} ${!db_port}
@@ -147,7 +147,7 @@ do
 
         echo "az vm run-command invoke \
             --command-id RunShellScript \
-            --name ${!name} \
+            --name ${!vm_name} \
             --resource-group $rg_name \
             --scripts "@./load_balancer.sh" \
             --parameters ${!my_port} ${!backend_1_ip} ${!backend_1_port} ${!backend_2_ip} ${!backend_2_port} ${!backend_3_ip} ${!backend_3_port}"
@@ -168,7 +168,7 @@ do
         
         az vm run-command invoke \
             --command-id RunShellScript \
-            --name ${!name} \
+            --name ${!vm_name} \
             --resource-group $rg_name \
             --scripts "@./frontend.sh" \
             --parameters ${backend_ip} ${!backend_port} ${!frontend_port}

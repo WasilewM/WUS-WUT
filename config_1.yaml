@@ -76,13 +76,13 @@ components:
   db_master:
     type: "db_master"
     public_ip: ""
-    name: "component-db-master"
+    vm_name: "vm-1-db-master"
     IP: "10.0.1.20"
     port: 3306
   backend:
     type: "backend"
     public_ip: "backend_ip"
-    name: "component-backend" 
+    vm_name: "vm-2-backend" 
     IP: "10.0.2.20"
     port: 8100
     related:
@@ -90,7 +90,7 @@ components:
   frontend:
     type: "frontend"
     public_ip: "frontend_ip"
-    name: "component-frontend"
+    vm_name: "vm-3-frontend"
     IP: "10.0.3.20"
     port: 8000
     related: 
