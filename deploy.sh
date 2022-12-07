@@ -121,18 +121,23 @@ do
 
     if [ ${!type} == "load_balancer" ]; then
         my_port=${component}_port
-        
-        backend_1_vm_name=${component}_related_1
-        backend_1_ip=vms_${!backend_1_vm_name}_IP
-        backend_1_port=vms_${!backend_vm_name}_port
+        echo $my_port
+        echo ${!my_port}
 
-        backend_2_vm_name=${component}_related_2
-        backend_2_ip=vms_${!backend_1_vm_name}_IP
-        backend_2_port=vms_${!backend_vm_name}_port
+        backend_1_component_name=${component}_related_1_component
+        backend_1_vm=${component}_related_1_vm
+        backend_1_ip=vms_${!backend_1_vm}_IP
+        backend_1_port=components_${!backend_1_component_name}_port
 
-        backend_3_vm_name=${component}_related_3
-        backend_3_ip=vms_${!backend_1_vm_name}_IP
-        backend_3_port=vms_${!backend_vm_name}_port
+        backend_2_component_name=${component}_related_2_component
+        backend_2_vm=${component}_related_2_vm
+        backend_2_ip=vms_${!backend_2_vm}_IP
+        backend_2_port=components_${!backend_2_component_name}_port
+
+        backend_3_component_name=${component}_related_3_component
+        backend_3_vm=${component}_related_3_vm
+        backend_3_ip=vms_${!backend_3_vm}_IP
+        backend_3_port=components_${!backend_3_component_name}_port
 
         az vm run-command invoke \
             --command-id RunShellScript \
@@ -143,12 +148,29 @@ do
     fi
 
     if [ ${!type} == "frontend" ]; then
-        backend_vm_name=${component}_related_1
+        backend_component_name=${component}_related_1_component
+        backend_vm_name=${component}_related_1_vm
         backend_public_ip_name=vms_${!backend_vm_name}_public_ip
         backend_ip=$(az network public-ip show --resource-group $rg_name --name ${!backend_public_ip_name} --query "ipAddress" --output tsv)
-        backend_port=components_${!backend_vm_name}_port
+        backend_port=components_${!backend_component_name}_port
         frontend_port=${component}_port
         
+        # echo $backend_vm_name
+        # echo ${!backend_vm_name}
+        # echo "-"
+
+        # echo $backend_public_ip_name
+        # echo ${!backend_public_ip_name}
+        # echo "-"
+
+        # echo $backend_port
+        # echo ${!backend_port}
+        # echo "-"
+
+        # echo $frontend_port
+        # echo ${!frontend_port}
+        # echo "-"
+
         az vm run-command invoke \
             --command-id RunShellScript \
             --name ${!vm_name} \

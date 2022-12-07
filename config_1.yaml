@@ -88,4 +88,4 @@ components:
     vm_name: "vm-3-frontend"
     port: 8000
     related: 
-      - backend
+      - {component: backend, vm: backend}
