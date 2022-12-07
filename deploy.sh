@@ -109,7 +109,7 @@ do
     if [ ${!type} == "backend" ]; then
         db_vm_name=${component}_related_1
         db_ip=vms_${!db_vm_name}_IP
-        db_port=vms_${!db_vm_name}_port
+        db_port=components_${!db_vm_name}_port
 
         az vm run-command invoke \
             --command-id RunShellScript \
@@ -146,7 +146,7 @@ do
         backend_vm_name=${component}_related_1
         backend_public_ip_name=vms_${!backend_vm_name}_public_ip
         backend_ip=$(az network public-ip show --resource-group $rg_name --name ${!backend_public_ip_name} --query "ipAddress" --output tsv)
-        backend_port=vms_${!backend_vm_name}_port
+        backend_port=components_${!backend_vm_name}_port
         frontend_port=${component}_port
         
         az vm run-command invoke \
