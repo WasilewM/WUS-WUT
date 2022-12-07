@@ -80,13 +80,11 @@ done
 
 for VM in $vms_
 do
-    type=${VM}_type
     subnet=${VM}_subnet
     nsg=${VM}_nsg
     public_ip=${VM}_public_ip
     name=${VM}_name
     IP=${VM}_IP
-    port=${VM}_port
 
     echo "creating VM ${!name}"
 
@@ -102,12 +100,12 @@ do
         --public-ip-address "${!public_ip}"
 done
 
-for VM in $vms_
+for component in $components_
 do
-    type=${VM}_type
-    name=${VM}_name
-    IP=${VM}_IP
-    port=${VM}_port
+    type=${component}_type
+    name=${component}_name
+    IP=${component}_IP
+    port=${component}_port
 
     echo "deploying ${!name}"
 
@@ -121,7 +119,7 @@ do
     fi
 
     if [ ${!type} == "backend" ]; then
-        db_vm_name=${VM}_related_1
+        db_vm_name=${component}_related_1
         db_ip=vms_${!db_vm_name}_IP
         db_port=vms_${!db_vm_name}_port
         az vm run-command invoke \
@@ -133,17 +131,17 @@ do
     fi
 
     if [ ${!type} == "load_balancer" ]; then
-        my_port=${VM}_port
+        my_port=${component}_port
         
-        backend_1_vm_name=${VM}_related_1
+        backend_1_vm_name=${component}_related_1
         backend_1_ip=vms_${!backend_1_vm_name}_IP
         backend_1_port=vms_${!backend_vm_name}_port
 
-        backend_2_vm_name=${VM}_related_2
+        backend_2_vm_name=${component}_related_2
         backend_2_ip=vms_${!backend_1_vm_name}_IP
         backend_2_port=vms_${!backend_vm_name}_port
 
-        backend_3_vm_name=${VM}_related_3
+        backend_3_vm_name=${component}_related_3
         backend_3_ip=vms_${!backend_1_vm_name}_IP
         backend_3_port=vms_${!backend_vm_name}_port
 
@@ -162,11 +160,11 @@ do
     fi
 
     if [ ${!type} == "frontend" ]; then
-        backend_vm_name=${VM}_related_1
+        backend_vm_name=${component}_related_1
         backend_public_ip_name=vms_${!backend_vm_name}_public_ip
         backend_ip=$(az network public-ip show --resource-group $rg_name --name ${!backend_public_ip_name} --query "ipAddress" --output tsv)
         backend_port=vms_${!backend_vm_name}_port
-        frontend_port=${VM}_port
+        frontend_port=${component}_port
         
         az vm run-command invoke \
             --command-id RunShellScript \
