@@ -30,7 +30,7 @@ cat populateDB.sql | sudo mysql -f
 
 sudo mysql -v -e "UNLOCK TABLES;"
 
-STATEMENT="CHANGE MASTER TO MASTER_HOST='${master_address}', MASTER_PORT=${master_port}, MASTER_USER=pc, MASTER_PASSWORD=petclinic;"
+STATEMENT="CHANGE MASTER TO MASTER_HOST='$master_address', MASTER_PORT=$master_port, MASTER_USER=pc, MASTER_PASSWORD=petclinic;"
 
 sudo mysql -v -e "${STATEMENT}"
 sudo mysql -v -e "START SLAVE;"
