@@ -56,6 +56,7 @@ vms:
   db_master:
     type: "db_master"
     subnet: "subnet-1-db"
+    nsg: "nsg-1-db"
     public_ip: ""
     name: "vm-1-db-master"
     IP: "10.0.1.20"
@@ -63,6 +64,7 @@ vms:
   backend_1:
     type: "backend"
     subnet: "subnet-2-backend"
+    nsg: "nsg-2-backend"
     public_ip: "backend_ip"
     name: "vm-2-backend-1" 
     IP: "10.0.2.20"
@@ -72,6 +74,7 @@ vms:
   backend_2:
     type: "backend"
     subnet: "subnet-2-backend"
+    nsg: "nsg-2-backend"
     public_ip: "backend_ip"
     name: "vm-3-backend-2" 
     IP: "10.0.2.21"
@@ -81,6 +84,7 @@ vms:
   backend_3:
     type: "backend"
     subnet: "subnet-2-backend"
+    nsg: "nsg-2-backend"
     public_ip: "backend_ip"
     name: "vm-4-backend-3" 
     IP: "10.0.2.22"
@@ -90,6 +94,7 @@ vms:
   load_balancer:
     type: "load-balancer"
     subnet: "subnet-3-frontend"
+    nsg: "nsg-3-frontend"
     public_ip: "load_balancer_ip"
     name: "vm-5-load-balancer"
     IP: "10.0.3.21"
@@ -101,6 +106,7 @@ vms:
   frontend:
     type: "frontend"
     subnet: "subnet-3-frontend"
+    nsg: "nsg-3-frontend"
     public_ip: "frontend_ip"
     name: "vm-6-frontend"
     IP: "10.0.3.20"
