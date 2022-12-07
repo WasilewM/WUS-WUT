@@ -65,7 +65,7 @@ vms:
     type: "backend"
     subnet: "subnet-2-backend"
     nsg: "nsg-2-backend"
-    public_ip: "backend_ip"
+    public_ip: ""
     name: "vm-2-backend-1" 
     IP: "10.0.2.20"
     port: 8100
@@ -75,7 +75,7 @@ vms:
     type: "backend"
     subnet: "subnet-2-backend"
     nsg: "nsg-2-backend"
-    public_ip: "backend_ip"
+    public_ip: ""
     name: "vm-3-backend-2" 
     IP: "10.0.2.21"
     port: 8101
@@ -85,14 +85,14 @@ vms:
     type: "backend"
     subnet: "subnet-2-backend"
     nsg: "nsg-2-backend"
-    public_ip: "backend_ip"
+    public_ip: ""
     name: "vm-4-backend-3" 
     IP: "10.0.2.22"
     port: 8102
     related:
       - db_master
   load_balancer:
-    type: "load-balancer"
+    type: "load_balancer"
     subnet: "subnet-3-frontend"
     nsg: "nsg-3-frontend"
     public_ip: "load_balancer_ip"
