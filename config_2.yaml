@@ -99,9 +99,12 @@ components:
   load_balancer:
     type: "load_balancer"
     vm_name: "vm-3-frontend"
+    vm_config: "frontend"
     port: 8001
     related:
       - {component: backend_1, vm: backend}
+      - {component: backend_2, vm: backend}
+      - {component: backend_3, vm: backend}
   frontend:
     type: "frontend"
     vm_name: "vm-3-frontend"

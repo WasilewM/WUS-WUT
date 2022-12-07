@@ -120,9 +120,16 @@ do
     fi
 
     if [ ${!type} == "load_balancer" ]; then
+        vm_config_name=${component}_vm_config
+        my_ip=vms_${!vm_config_name}_IP
+        # echo $vm_config_name
+        # echo ${!vm_config_name}
+        # echo $my_ip
+        # echo ${!my_ip}
+        
         my_port=${component}_port
-        echo $my_port
-        echo ${!my_port}
+        # echo $my_port
+        # echo ${!my_port}
 
         backend_1_component_name=${component}_related_1_component
         backend_1_vm=${component}_related_1_vm
@@ -144,7 +151,7 @@ do
             --name ${!name} \
             --resource-group $rg_name \
             --scripts "@./load_balancer.sh" \
-            --parameters ${!my_port} ${!backend_1_ip} ${!backend_1_port} ${!backend_2_ip} ${!backend_2_port} ${!backend_3_ip} ${!backend_3_port}
+            --parameters ${!my_ip} ${!my_port} ${!backend_1_ip} ${!backend_1_port} ${!backend_2_ip} ${!backend_2_port} ${!backend_3_ip} ${!backend_3_port}
     fi
 
     if [ ${!type} == "frontend" ]; then
