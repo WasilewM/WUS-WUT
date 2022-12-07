@@ -24,25 +24,11 @@ for group in $network_sec_groups_; do
     rule_dst_port_ranges=${group}_rule_dst_port_ranges
 
     echo "creating network security group ${!name}"
-    echo "az network nsg create \
-        --resource-group $rg_name \
-        --name ${!name}"
     az network nsg create \
         --resource-group $rg_name \
         --name ${!name}
     
     echo "creating network security group rule ${!name}"
-    echo "az network nsg rule create \
-    --resource-group $rg_name \
-    --nsg-name ${!name} \
-    --name ${!rule_name} \
-    --access ${!rule_access} \
-    --protocol ${!rule_protocol} \
-    --priority ${!rule_priority} \
-    --source-address-prefix ${!rule_src_addr_pref} \
-    --source-port-range ${!rule_src_port_ranges} \
-    --destination-address-prefix ${!rule_dst_addr_pref} \
-    --destination-port-range ${!rule_dst_port_ranges}"
     az network nsg rule create \
         --resource-group $rg_name \
         --nsg-name ${!name} \
@@ -63,12 +49,6 @@ for subnet in $subnets_; do
     nsg=${subnet}_nsg
 
     echo "creating network subnet ${!name}"
-    echo "az network vnet subnet create \
-        --resource-group $rg_name \
-        --vnet-name network \
-        --name ${!name} \
-        --address-prefix ${!addr_pref} \
-        --network-security-group ${!nsg}"
     az network vnet subnet create \
         --resource-group $rg_name \
         --vnet-name network \
@@ -81,9 +61,6 @@ done
 for IP in $public_ips_
 do
     echo "creating public IP (${!IP})"
-    echo "az network public-ip create \
-        --resource-group $rg_name \
-        --name ${!IP}"
     az network public-ip create \
         --resource-group $rg_name \
         --name ${!IP}
@@ -99,16 +76,6 @@ do
     IP=${VM}_IP
 
     echo "creating VM ${!name}"
-    echo "az vm create \
-        --name ${!name} \
-        --resource-group $rg_name \
-        --image Canonical:0001-com-ubuntu-server-jammy-daily:22_04-daily-lts-gen2:22.04.202211100 \
-        --generate-ssh-keys \
-        --vnet-name network \
-        --subnet ${!subnet} \
-        --nsg ${!nsg} \
-        --private-ip-address ${!IP} \
-        --public-ip-address "${!public_ip}""
     az vm create \
         --name ${!name} \
         --resource-group $rg_name \
@@ -131,12 +98,6 @@ do
     echo "deploying ${!vm_name}"
 
     if [ ${!type} == "db_master" ]; then
-        echo "az vm run-command invoke \
-            --command-id RunShellScript \
-            --name ${!vm_name} \
-            --resource-group $rg_name \
-            --scripts "@./database.sh" \
-            --parameters ${!port}"
         az vm run-command invoke \
             --command-id RunShellScript \
             --name ${!vm_name} \
@@ -150,12 +111,6 @@ do
         db_ip=vms_${!db_vm_name}_IP
         db_port=vms_${!db_vm_name}_port
 
-        echo "az vm run-command invoke \
-            --command-id RunShellScript \
-            --name ${!vm_name} \
-            --resource-group $rg_name \
-            --scripts "@./backend.sh" \
-            --parameters ${!port} ${!db_ip} ${!db_port}"
         az vm run-command invoke \
             --command-id RunShellScript \
             --name ${!vm_name} \
@@ -179,12 +134,6 @@ do
         backend_3_ip=vms_${!backend_1_vm_name}_IP
         backend_3_port=vms_${!backend_vm_name}_port
 
-        echo "az vm run-command invoke \
-            --command-id RunShellScript \
-            --name ${!vm_name} \
-            --resource-group $rg_name \
-            --scripts "@./load_balancer.sh" \
-            --parameters ${!my_port} ${!backend_1_ip} ${!backend_1_port} ${!backend_2_ip} ${!backend_2_port} ${!backend_3_ip} ${!backend_3_port}"
         az vm run-command invoke \
             --command-id RunShellScript \
             --name ${!name} \
@@ -200,12 +149,6 @@ do
         backend_port=vms_${!backend_vm_name}_port
         frontend_port=${component}_port
         
-        echo "az vm run-command invoke \
-            --command-id RunShellScript \
-            --name ${!vm_name} \
-            --resource-group $rg_name \
-            --scripts "@./frontend.sh" \
-            --parameters ${backend_ip} ${!backend_port} ${!frontend_port}"
         az vm run-command invoke \
             --command-id RunShellScript \
             --name ${!vm_name} \
