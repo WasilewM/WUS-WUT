@@ -1,5 +1,4 @@
 rg_name: wus-lab-1-config-2-rg
-rg_name: config-1-rg
 network_sec_groups:
   nsg1db:
     name: "nsg-1-db"
@@ -50,61 +49,65 @@ subnets:
     nsg: "nsg-3-frontend"
 
 public_ips:
-  - load_balancer_ip
+  - backend_ip
   - frontend_ip
 
 vms:
   db_master:
-    type: "db_master"
     subnet: "subnet-1-db"
+    nsg: "nsg-1-db"
     public_ip: ""
     name: "vm-1-db-master"
     IP: "10.0.1.20"
+  backend:
+    subnet: "subnet-2-backend"
+    nsg: "nsg-2-backend"
+    public_ip: "backend_ip"
+    name: "vm-2-backend" 
+    IP: "10.0.2.20"
+  frontend:
+    subnet: "subnet-3-frontend"
+    nsg: "nsg-3-frontend"
+    public_ip: "frontend_ip"
+    name: "vm-3-frontend"
+    IP: "10.0.3.20"
+
+
+components:
+  db_master:
+    type: "db_master"
+    vm_name: "vm-1-db-master"
     port: 3306
   backend_1:
     type: "backend"
-    subnet: "subnet-2-backend"
-    public_ip: "backend_ip"
-    name: "vm-2-backend-1" 
-    IP: "10.0.2.20"
+    vm_name: "vm-2-backend" 
     port: 8100
     related:
       - db_master
   backend_2:
     type: "backend"
-    subnet: "subnet-2-backend"
-    public_ip: "backend_ip"
-    name: "vm-3-backend-2" 
-    IP: "10.0.2.21"
+    vm_name: "vm-2-backend" 
     port: 8101
     related:
       - db_master
   backend_3:
     type: "backend"
-    subnet: "subnet-2-backend"
-    public_ip: "backend_ip"
-    name: "vm-4-backend-3" 
-    IP: "10.0.2.22"
+    vm_name: "vm-2-backend" 
     port: 8102
     related:
       - db_master
   load_balancer:
-    type: "load-balancer"
-    subnet: "subnet-3-frontend"
-    public_ip: "load_balancer_ip"
-    name: "vm-5-load-balancer"
-    IP: "10.0.3.21"
+    type: "load_balancer"
+    vm_name: "vm-3-frontend"
+    vm_config: "frontend"
     port: 8001
     related:
-      - backend_1
-      - backend_2
-      - backend_3
+      - {component: backend_1, vm: backend}
+      - {component: backend_2, vm: backend}
+      - {component: backend_3, vm: backend}
   frontend:
     type: "frontend"
-    subnet: "subnet-3-frontend"
-    public_ip: "frontend_ip"
-    name: "vm-6-frontend"
-    IP: "10.0.3.20"
+    vm_name: "vm-3-frontend"
     port: 8000
     related: 
-      - load_balancer
+      - {component: load_balancer, vm: frontend}

@@ -29,17 +29,6 @@ for group in $network_sec_groups_; do
         --name ${!name}
     
     echo "creating network security group rule ${!name}"
-    echo "az network nsg rule create \
-    --resource-group $rg_name \
-    --nsg-name ${!name} \
-    --name ${!rule_name} \
-    --access ${!rule_access} \
-    --protocol ${!rule_protocol} \
-    --priority ${!rule_priority} \
-    --source-address-prefix ${!rule_src_addr_pref} \
-    --source-port-range ${!rule_src_port_ranges} \
-    --destination-address-prefix ${!rule_dst_addr_pref} \
-    --destination-port-range ${!rule_dst_port_ranges}"
     az network nsg rule create \
         --resource-group $rg_name \
         --nsg-name ${!name} \
@@ -80,16 +69,13 @@ done
 
 for VM in $vms_
 do
-    type=${VM}_type
     subnet=${VM}_subnet
     nsg=${VM}_nsg
     public_ip=${VM}_public_ip
     name=${VM}_name
     IP=${VM}_IP
-    port=${VM}_port
 
     echo "creating VM ${!name}"
-
     az vm create \
         --name ${!name} \
         --resource-group $rg_name \
@@ -102,75 +88,86 @@ do
         --public-ip-address "${!public_ip}"
 done
 
-for VM in $vms_
+for component in $components_
 do
-    type=${VM}_type
-    name=${VM}_name
-    IP=${VM}_IP
-    port=${VM}_port
+    type=${component}_type
+    vm_name=${component}_vm_name
+    IP=${component}_IP
+    port=${component}_port
 
-    echo "deploying ${!name}"
+    echo "deploying component of type ${!type} on vm ${!vm_name}"
 
     if [ ${!type} == "db_master" ]; then
         az vm run-command invoke \
             --command-id RunShellScript \
-            --name ${!name} \
+            --name ${!vm_name} \
             --resource-group $rg_name \
             --scripts "@./database.sh" \
             --parameters ${!port}
     fi
 
-    if [ ${!type} == "backend" ]; then
-        db_vm_name=${VM}_related_1
-        db_ip=vms_${!db_vm_name}_IP
-        db_port=vms_${!db_vm_name}_port
+    if [ ${!type} == "db_slave" ]; then
+        # @TODO add params 
         az vm run-command invoke \
             --command-id RunShellScript \
-            --name ${!name} \
+            --name ${!vm_name} \
+            --resource-group $rg_name \
+            --scripts "@./database_slave.sh" \
+            --parameters ${!port} ${!master_db_address} ${!master_db_port}
+    fi
+
+    if [ ${!type} == "backend" ]; then
+        db_vm_name=${component}_related_1
+        db_ip=vms_${!db_vm_name}_IP
+        db_port=components_${!db_vm_name}_port
+
+        az vm run-command invoke \
+            --command-id RunShellScript \
+            --name ${!vm_name} \
             --resource-group $rg_name \
             --scripts "@./backend.sh" \
             --parameters ${!port} ${!db_ip} ${!db_port}
     fi
 
     if [ ${!type} == "load_balancer" ]; then
-        my_port=${VM}_port
-        
-        backend_1_vm_name=${VM}_related_1
-        backend_1_ip=vms_${!backend_1_vm_name}_IP
-        backend_1_port=vms_${!backend_vm_name}_port
+        vm_config_name=${component}_vm_config
+        my_ip=vms_${!vm_config_name}_IP        
+        my_port=${component}_port
 
-        backend_2_vm_name=${VM}_related_2
-        backend_2_ip=vms_${!backend_1_vm_name}_IP
-        backend_2_port=vms_${!backend_vm_name}_port
+        backend_1_component_name=${component}_related_1_component
+        backend_1_vm=${component}_related_1_vm
+        backend_1_ip=vms_${!backend_1_vm}_IP
+        backend_1_port=components_${!backend_1_component_name}_port
 
-        backend_3_vm_name=${VM}_related_3
-        backend_3_ip=vms_${!backend_1_vm_name}_IP
-        backend_3_port=vms_${!backend_vm_name}_port
+        backend_2_component_name=${component}_related_2_component
+        backend_2_vm=${component}_related_2_vm
+        backend_2_ip=vms_${!backend_2_vm}_IP
+        backend_2_port=components_${!backend_2_component_name}_port
 
-        echo "az vm run-command invoke \
-            --command-id RunShellScript \
-            --name ${!name} \
-            --resource-group $rg_name \
-            --scripts "@./load_balancer.sh" \
-            --parameters ${!my_port} ${!backend_1_ip} ${!backend_1_port} ${!backend_2_ip} ${!backend_2_port} ${!backend_3_ip} ${!backend_3_port}"
+        backend_3_component_name=${component}_related_3_component
+        backend_3_vm=${component}_related_3_vm
+        backend_3_ip=vms_${!backend_3_vm}_IP
+        backend_3_port=components_${!backend_3_component_name}_port
+
         az vm run-command invoke \
             --command-id RunShellScript \
             --name ${!name} \
             --resource-group $rg_name \
             --scripts "@./load_balancer.sh" \
-            --parameters ${!my_port} ${!backend_1_ip} ${!backend_1_port} ${!backend_2_ip} ${!backend_2_port} ${!backend_3_ip} ${!backend_3_port}
+            --parameters ${!my_ip} ${!my_port} ${!backend_1_ip} ${!backend_1_port} ${!backend_2_ip} ${!backend_2_port} ${!backend_3_ip} ${!backend_3_port}
     fi
 
     if [ ${!type} == "frontend" ]; then
-        backend_vm_name=${VM}_related_1
+        backend_component_name=${component}_related_1_component
+        backend_vm_name=${component}_related_1_vm
         backend_public_ip_name=vms_${!backend_vm_name}_public_ip
         backend_ip=$(az network public-ip show --resource-group $rg_name --name ${!backend_public_ip_name} --query "ipAddress" --output tsv)
-        backend_port=vms_${!backend_vm_name}_port
-        frontend_port=${VM}_port
-        
+        backend_port=components_${!backend_component_name}_port
+        frontend_port=${component}_port
+
         az vm run-command invoke \
             --command-id RunShellScript \
-            --name ${!name} \
+            --name ${!vm_name} \
             --resource-group $rg_name \
             --scripts "@./frontend.sh" \
             --parameters ${backend_ip} ${!backend_port} ${!frontend_port}
