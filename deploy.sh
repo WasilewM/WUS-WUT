@@ -95,7 +95,7 @@ do
     IP=${component}_IP
     port=${component}_port
 
-    echo "deploying ${!vm_name}"
+    echo "deploying component of type ${!type} on vm ${!vm_name}"
 
     if [ ${!type} == "db_master" ]; then
         az vm run-command invoke \
