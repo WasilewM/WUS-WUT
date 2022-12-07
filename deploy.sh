@@ -106,6 +106,16 @@ do
             --parameters ${!port}
     fi
 
+    if [ ${!type} == "db_slave" ]; then
+        # @TODO add params 
+        az vm run-command invoke \
+            --command-id RunShellScript \
+            --name ${!vm_name} \
+            --resource-group $rg_name \
+            --scripts "@./database_slave.sh" \
+            --parameters ${!port} ${!master_db_address} ${!master_db_port}
+    fi
+
     if [ ${!type} == "backend" ]; then
         db_vm_name=${component}_related_1
         db_ip=vms_${!db_vm_name}_IP
@@ -121,15 +131,8 @@ do
 
     if [ ${!type} == "load_balancer" ]; then
         vm_config_name=${component}_vm_config
-        my_ip=vms_${!vm_config_name}_IP
-        # echo $vm_config_name
-        # echo ${!vm_config_name}
-        # echo $my_ip
-        # echo ${!my_ip}
-        
+        my_ip=vms_${!vm_config_name}_IP        
         my_port=${component}_port
-        # echo $my_port
-        # echo ${!my_port}
 
         backend_1_component_name=${component}_related_1_component
         backend_1_vm=${component}_related_1_vm
@@ -161,22 +164,6 @@ do
         backend_ip=$(az network public-ip show --resource-group $rg_name --name ${!backend_public_ip_name} --query "ipAddress" --output tsv)
         backend_port=components_${!backend_component_name}_port
         frontend_port=${component}_port
-        
-        # echo $backend_vm_name
-        # echo ${!backend_vm_name}
-        # echo "-"
-
-        # echo $backend_public_ip_name
-        # echo ${!backend_public_ip_name}
-        # echo "-"
-
-        # echo $backend_port
-        # echo ${!backend_port}
-        # echo "-"
-
-        # echo $frontend_port
-        # echo ${!frontend_port}
-        # echo "-"
 
         az vm run-command invoke \
             --command-id RunShellScript \
