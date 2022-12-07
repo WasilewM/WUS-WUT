@@ -23,14 +23,10 @@ sed -i "s/GRANT ALL PRIVILEGES ON petclinic.* TO pc@localhost IDENTIFIED BY 'pc'
 cat initDB.sql | sudo mysql -f
 
 wget https://raw.githubusercontent.com/spring-petclinic/spring-petclinic-rest/master/src/main/resources/db/mysql/populateDB.sql
-
 sed -i '1 i\USE petclinic;' ./populateDB.sql
-
 cat populateDB.sql | sudo mysql -f
 
 sudo mysql -v -e "UNLOCK TABLES;"
 
-STATEMENT="CHANGE MASTER TO MASTER_HOST='$master_address', MASTER_PORT=$master_port, MASTER_USER=pc, MASTER_PASSWORD=petclinic;"
-
-sudo mysql -v -e "${STATEMENT}"
+sudo mysql -v -e "CHANGE MASTER TO MASTER_HOST='$master_address', MASTER_PORT=$master_port, MASTER_USER=pc, MASTER_PASSWORD=petclinic;"
 sudo mysql -v -e "START SLAVE;"

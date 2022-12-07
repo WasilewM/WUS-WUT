@@ -25,9 +25,7 @@ sed -i "s/GRANT ALL PRIVILEGES ON petclinic.* TO pc@localhost IDENTIFIED BY 'pc'
 cat initDB.sql | sudo mysql -f
 
 wget https://raw.githubusercontent.com/spring-petclinic/spring-petclinic-rest/master/src/main/resources/db/mysql/populateDB.sql
-
 sed -i '1 i\USE petclinic;' ./populateDB.sql
-
 cat populateDB.sql | sudo mysql -f
 
 sudo mysql -v -e "UNLOCK TABLES;"
