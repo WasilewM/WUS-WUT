@@ -147,12 +147,6 @@ do
         backend_3_ip=vms_${!backend_1_vm_name}_IP
         backend_3_port=vms_${!backend_vm_name}_port
 
-        echo "az vm run-command invoke \
-            --command-id RunShellScript \
-            --name ${!name} \
-            --resource-group $rg_name \
-            --scripts "@./load_balancer.sh" \
-            --parameters ${!my_port} ${!backend_1_ip} ${!backend_1_port} ${!backend_2_ip} ${!backend_2_port} ${!backend_3_ip} ${!backend_3_port}"
         az vm run-command invoke \
             --command-id RunShellScript \
             --name ${!name} \
