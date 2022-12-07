@@ -107,13 +107,18 @@ do
     fi
 
     if [ ${!type} == "db_slave" ]; then
-        # @TODO add params 
+        db_master_component_name=${component}_related_1_component
+        db_master_port=components_${!db_master_component_name}_port
+
+        db_master_vm=${component}_related_1_vm
+        db_master_ip=vms_${!db_master_vm}_IP
+
         az vm run-command invoke \
             --command-id RunShellScript \
             --name ${!vm_name} \
             --resource-group $rg_name \
             --scripts "@./database_slave.sh" \
-            --parameters ${!port} ${!master_db_address} ${!master_db_port}
+            --parameters ${!port} ${!db_master_ip} ${!db_master_port}
     fi
 
     if [ ${!type} == "backend" ]; then
