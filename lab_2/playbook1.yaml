@@ -1,26 +1,23 @@
 - name: Deploy database
-  hosts: host1  # @TODO check if renaming to host-db possible
+  hosts: host1
   tasks:
     - include_vars: config_1.yaml
     - name: Run database.sh
       ansible.builtin.script:
         cmd: scripts/database.sh {{ port }}
-        # @TODO is db-vm IP needed?
 
 - name: Deploy backend
-  hosts: host2  # @TODO check if renaming to host-backend possible
+  hosts: host1
   tasks:
     - include_vars: config_1.yaml
-      name: Run backend.sh
-      ansible.buildin.script:
+    - name: Run backend.sh
+      ansible.builtin.script:
         cmd: scripts/backend {{ backend_port }} {{ db_ip }} {{ db_port }}
-        # @TODO is backend-vm IP needed?
 
 - name: Deploy frontend
-  hosts: host3  # @TODO check if renaming to host-frontend possible
+  hosts: host2
   tasks:
     - include_vars: config_1.yaml
     - name: Run frontend.sh
       ansible.builtin.script:
         cmd: scripts/frontend.sh {{ backend_ip }} {{ backend_port }} {{ frontend_port }}
-        # @TODO is frontend-vm IP needed?
