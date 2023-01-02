@@ -4,7 +4,7 @@
     - include_vars: config_1.yaml
     - name: Run database.sh
       ansible.builtin.script:
-        cmd: scripts/database.sh {{ port }}
+        cmd: scripts/database.sh {{ db_port }}
 
 - name: Deploy backend
   hosts: host1

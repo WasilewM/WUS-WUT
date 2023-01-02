@@ -1,27 +1,28 @@
 #!/bin/bash
-sudo apt update 
-sudo apt upgrade
-sudo apt install software-properties-common
+sudo apt update -y
+sudo apt upgrade -y
+sudo apt install software-properties-common -y
 
-sudo add-apt-repository ppa:deadsnakes/ppa
-sudo apt update
-sudo apt install python3.9
-alias python3='python3.9'
-
-sudo apt install python3.9-distutils
-sudo apt install python3-pip
-python3.9 -m pip install --upgrade pip
+python3 -V
+sudo apt install python3-pip -y
+python3 -m pip -V
 python3 -m pip install --user ansible
-# need to somehow remember the user value
-export PATH=/home/user/.local/bin:$PATH
+python3 -m pip show ansible
 
-pip install ansible
-sudo apt install ansible-core
-sudo apt install ansible
+sudo apt install ansible-core -y
+sudo apt install ansible -y
+ansible --version
 
+# Now manually create inventory file from provided template.
+#
+# Then copy the id_rsa.pem from your bash console to the vm0-ansible.
+#
+# Next, change permission for the key file with the following command
 # chmod 600 id_rsa.pem
+#
+# Finaly, you can check connection with the following command:
 # ansible -i inventory.yaml all -m ping
-# # expected answer:
+# expected answer:
 # host1 | SUCCESS => {
 #     "ansible_facts": {
 #         "discovered_interpreter_python": "/usr/bin/python3"
