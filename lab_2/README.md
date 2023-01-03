@@ -5,3 +5,4 @@
 ```
 ansible-playbook playbook1.yaml -i inventory.yaml
 ```
+For debug info add `-vvv` to the command above.
