@@ -20,7 +20,7 @@
       ansible.builtin.script:
         cmd: scripts/backend.sh {{ backend_port }} {{ db_ip }} {{ db_port }}
     - name: Start backend
-      shell: cd /backend/spring-petclinic-rest; nohup ./mvnw spring-boot:run &
+      shell: cd ~/backend/spring-petclinic-rest; nohup ./mvnw spring-boot:run &
 
 - name: Deploy frontend
   hosts: host2
@@ -36,5 +36,5 @@
       ansible.builtin.script:
         cmd: scripts/frontend.sh {{ backend_ip }} {{ backend_port }} {{ frontend_port }}
     - name: Start backend
-      shell: cd /frontend/spring-petclinic-angular; nohup npx angular-http-server --path ./dist -p {{ frontend_port }} > angular.out 2> angular.err &
+      shell: cd ~/frontend/spring-petclinic-angular; nohup npx angular-http-server --path ./dist -p {{ frontend_port }} > angular.out 2> angular.err &
 
