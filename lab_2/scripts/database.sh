@@ -8,14 +8,15 @@ then
 	sudo rm -rf ./database
 fi
 
-echo "sudo mysql -e DROP USER mysql_username'@'%';"
-sudo mysql -e "DROP USER '${mysql_username}'@'%';"
+echo "sudo mysql -e DROP USER pc;"
+sudo mysql -e "DROP USER pc;"
 
 echo "sudo mysql -e DROP DATABASE petclinic;"
 sudo mysql -e "DROP DATABASE petclinic;"
 
 if [ ! -d ./database ]
 then
+	echo "Create new ./database directory"
 	mkdir ./database
 fi
 
@@ -32,7 +33,7 @@ echo "bind-address = 0.0.0.0" | sudo tee -a /etc/mysql/my.cnf
 echo "server-id = 1" | sudo tee -a /etc/mysql/my.cnf
 echo "log_bin = /var/log/mysql/mysql-bin.log" | sudo tee -a /etc/mysql/my.cnf
 
-sudo service mysql restart
+sudo service restart mysql.service
 
 # sed -i "s/127.0.0.1/0.0.0.0/g" /etc/mysql/mysql.conf.d/mysqld.cnf
 
