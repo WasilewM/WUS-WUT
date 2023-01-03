@@ -30,4 +30,4 @@ sed -i "s/localhost/$db_ip/g" src/main/resources/application-mysql.properties
 sed -i "s/3306/$db_port/g" src/main/resources/application-mysql.properties
 sed -i "s/9966/$backend_port/g" src/main/resources/application.properties
 sed -i "s/active=hsqldb/active=mysql/g" src/main/resources/application.properties
-./mvnw spring-boot:run &
+./mvnw spring-boot:run
