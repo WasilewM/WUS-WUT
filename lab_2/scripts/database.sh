@@ -1,12 +1,12 @@
 #!/bin/bash
 port=$1
 
-echo "### BEFORE SCRIPT CLEANUP STARTED"
-if [ -d ./database ]
-then
-    echo "Removed existing ./database directory"
-	sudo rm -rf ./database
-fi
+# echo "### BEFORE SCRIPT CLEANUP STARTED"
+# if [ -d ./database ]
+# then
+#     echo "Removed existing ./database directory"
+# 	sudo rm -rf ./database
+# fi
 
 echo "sudo mysql -e DROP USER pc;"
 sudo mysql -e "DROP USER pc;"

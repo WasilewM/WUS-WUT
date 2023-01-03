@@ -10,6 +10,12 @@
   hosts: host1
   tasks:
     - include_vars: config_1.yaml
+    - name: Clone a github repository
+      git:
+        repo: https://github.com/spring-petclinic/spring-petclinic-rest.git
+        dest: ~/backend
+        clone: yes
+        update: yes
     - name: Run backend.sh
       ansible.builtin.script:
         cmd: scripts/backend.sh {{ backend_port }} {{ db_ip }} {{ db_port }}
@@ -18,6 +24,12 @@
   hosts: host2
   tasks:
     - include_vars: config_1.yaml
+    - name: Clone a github repository
+      git:
+        repo: https://github.com/spring-petclinic/spring-petclinic-angular
+        dest: ~/frontend
+        clone: yes
+        update: yes
     - name: Run frontend.sh
       ansible.builtin.script:
         cmd: scripts/frontend.sh {{ backend_ip }} {{ backend_port }} {{ frontend_port }}

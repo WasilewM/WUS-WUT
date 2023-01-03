@@ -6,13 +6,13 @@ backend_ip=$1
 backend_port=$2
 frontend_port=$3
 
-echo "### BEFORE SCRIPT CLEANUP STARTED"
-if [ -d ./frontend ]
-then
-    echo "Removed existing ./frontend directory" 
-	sudo rm -rf ./frontend
+# echo "### BEFORE SCRIPT CLEANUP STARTED"
+# if [ -d ./frontend ]
+# then
+#     echo "Removed existing ./frontend directory" 
+# 	sudo rm -rf ./frontend
 	
-fi
+# fi
 
 if [ ! -d ./frontend ]
 then
@@ -32,7 +32,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 nvm install 16
-git clone https://github.com/spring-petclinic/spring-petclinic-angular
+# git clone https://github.com/spring-petclinic/spring-petclinic-angular
 cd spring-petclinic-angular
 sed -i "s/localhost/$backend_ip/g" src/environments/environment.prod.ts src/environments/environment.ts
 sed -i "s/9966/$backend_port/g" src/environments/environment.prod.ts src/environments/environment.ts
