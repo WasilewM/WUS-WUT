@@ -1,7 +1,27 @@
 #!/bin/bash
 port=$1
 
-cd /root
+echo "### BEFORE SCRIPT CLEANUP STARTED"
+if [ -d ./database ]
+then
+    echo "Removed existing ./database directory"
+	sudo rm -rf ./database
+fi
+
+echo "sudo mysql -e DROP USER mysql_username'@'%';"
+sudo mysql -e "DROP USER '${mysql_username}'@'%';"
+
+echo "sudo mysql -e DROP DATABASE petclinic;"
+sudo mysql -e "DROP DATABASE petclinic;"
+
+if [ ! -d ./database ]
+then
+	mkdir ./database
+fi
+
+echo "### BEFORE SCRIPT CLEANUP FINISHED"
+cd database
+
 sudo apt update
 sudo apt upgrade -y
 sudo apt install -y mysql-server

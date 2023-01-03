@@ -1,10 +1,28 @@
 #!/bin/bash
 
+# @TODO FIX ME!
+
 backend_ip=$1
 backend_port=$2
 frontend_port=$3
 
-cd /root
+echo "### BEFORE SCRIPT CLEANUP STARTED"
+if [ -d ./frontend ]
+then
+    echo "Removed existing ./frontend directory" 
+	sudo rm -rf ./frontend
+	
+fi
+
+if [ ! -d ./frontend ]
+then
+    echo "Create new ./frontend directory"
+	mkdir ./frontend
+fi
+
+echo "### BEFORE SCRIPT CLEANUP FINISHED"
+cd frontend
+
 sudo apt update
 sudo apt upgrade -y
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash

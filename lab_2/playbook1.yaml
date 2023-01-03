@@ -12,7 +12,7 @@
     - include_vars: config_1.yaml
     - name: Run backend.sh
       ansible.builtin.script:
-        cmd: scripts/backend {{ backend_port }} {{ db_ip }} {{ db_port }}
+        cmd: scripts/backend.sh {{ backend_port }} {{ db_ip }} {{ db_port }}
 
 - name: Deploy frontend
   hosts: host2

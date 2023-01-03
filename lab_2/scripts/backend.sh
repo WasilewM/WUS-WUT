@@ -4,7 +4,23 @@ backend_port=$1
 db_ip=$2
 db_port=$3
 
-cd /root
+echo "### BEFORE SCRIPT CLEANUP STARTED"
+if [ -d ./backend ]
+then
+    echo "Removed existing ./backend directory" 
+	sudo rm -rf ./backend
+	
+fi
+
+if [ ! -d ./backend ]
+then
+    echo "Create new ./backend directory"
+	mkdir ./backend
+fi
+
+echo "### BEFORE SCRIPT CLEANUP FINISHED"
+cd backend
+
 sudo apt update
 sudo apt upgrade -y
 sudo apt install -y default-jre

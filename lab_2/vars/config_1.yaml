@@ -1,8 +1,8 @@
-db_ip: 20.101.63.188
+db_ip:
 db_port: 3306
 
-backend_ip: 20.101.63.188
+backend_ip:
 backend_port: 8100
 
-frontend_ip: 20.101.63.237
+frontend_ip:
 frontend_port: 8000
