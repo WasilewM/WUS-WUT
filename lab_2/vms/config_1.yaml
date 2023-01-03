@@ -10,7 +10,7 @@ network_sec_groups:
       src_addr_pref: "*"
       src_port_ranges: "*"
       dst_addr_pref: "*"
-      dst_port_ranges: 3306,8100
+      dst_port_ranges: "22-8100"
   nsg2frontend:
     name: "nsg-2-frontend"
     rule:
@@ -21,7 +21,18 @@ network_sec_groups:
       src_addr_pref: "*"
       src_port_ranges: "*"
       dst_addr_pref: "*"
-      dst_port_ranges: 8000
+      dst_port_ranges: "22-8000"
+  nsg3ansible:
+    name: "nsg-3-ansible"
+    rule:
+      name: "nsg-ansible"
+      access: "allow"
+      protocol: "Tcp"
+      priority: 1000
+      src_addr_pref: "*"
+      src_port_ranges: "*"
+      dst_addr_pref: "*"
+      dst_port_ranges: "22"
 
 subnets:
   subnet1backend:
@@ -32,10 +43,15 @@ subnets:
     name: "subnet-2-frontend"
     addr_pref: "10.0.2.0/24"
     nsg: "nsg-2-frontend"
+  subnet3ansible:
+    name: "subnet-3-ansible"
+    addr_pref: "10.0.3.0/24"
+    nsg: "nsg-3-ansible"
 
 public_ips:
   - backend_ip
   - frontend_ip
+  - ansible_ip
 
 vms:
   backend:
@@ -50,3 +66,9 @@ vms:
     public_ip: "frontend_ip"
     name: "vm-2-frontend"
     IP: "10.0.2.20"
+  ansible:
+    subnet: "subnet-3-ansible"
+    nsg: "nsg-3-ansible"
+    public_ip: "ansible_ip"
+    name: "vm-3-ansible"
+    IP: "10.0.3.20"
