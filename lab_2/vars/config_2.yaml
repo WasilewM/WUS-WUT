@@ -1,0 +1,17 @@
+db_ip:
+db_port: 3306
+
+backend_1_ip:
+backend_1_port: 8100
+
+backend_2_ip:
+backend_2_port: 8101
+
+backend_3_ip:
+backend_3_port: 8102
+
+load_balancer_ip:
+load_balancer_port: 8001
+
+frontend_ip:
+frontend_port: 8000

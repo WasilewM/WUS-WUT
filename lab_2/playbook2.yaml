@@ -1,0 +1,60 @@
+- name: Deploy database
+  hosts: host1
+  tasks:
+    - include_vars: config_2.yaml
+    - name: Run database.sh
+      ansible.builtin.script:
+        cmd: scripts/database.sh {{ db_port }}
+
+- name: Deploy backend 1
+  hosts: host1
+  tasks:
+    - include_vars: config_2.yaml
+    - name: Clone a github repository
+      git:
+        repo: https://github.com/spring-petclinic/spring-petclinic-rest.git
+        dest: ~/backend/spring-petclinic-rest
+        clone: yes
+        update: yes
+    - name: Run backend.sh
+      ansible.builtin.script:
+        cmd: scripts/backend.sh {{ backend_1_port }} {{ db_ip }} {{ db_port }}
+
+- name: Deploy backend 2
+  hosts: host1
+  tasks:
+    - include_vars: config_2.yaml
+    - name: Run backend.sh
+      ansible.builtin.script:
+        cmd: scripts/backend.sh {{ backend_2_port }} {{ db_ip }} {{ db_port }}
+
+- name: Deploy backend 3
+  hosts: host1
+  tasks:
+    - include_vars: config_2.yaml
+    - name: Run backend.sh
+      ansible.builtin.script:
+        cmd: scripts/backend.sh {{ backend_3_port }} {{ db_ip }} {{ db_port }}
+
+- name: Deploy load balancer
+  hosts: host2
+  tasks:
+    - include_vars: config_2.yaml
+    - name: Run load_balancer.sh
+      ansible.builtin.script:
+        cmd: scripts/load_balancer.sh {{ load_balancer_ip }} {{ load_balancer_port }} {{ backend_1_ip }} {{ backend_1_port }} {{ backend_2_ip }} {{ backend_2_port }} {{ backend_3_ip }} {{ backend_3_port }}
+
+
+- name: Deploy frontend
+  hosts: host2
+  tasks:
+    - include_vars: config_2.yaml
+    - name: Clone a github repository
+      git:
+        repo: https://github.com/spring-petclinic/spring-petclinic-angular.git
+        dest: ~/frontend/spring-petclinic-angular
+        clone: yes
+        update: yes
+    - name: Run frontend.sh
+      ansible.builtin.script:
+        cmd: scripts/frontend.sh {{ load_balancer_ip }} {{ load_balancer_port }} {{ frontend_port }}
