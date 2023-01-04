@@ -1,4 +1,4 @@
-rg_name: wus-lab-1-config-2-rg
+rg_name: config-2-rg
 network_sec_groups:
   nsg1backend:
     name: "nsg-1-backend"
