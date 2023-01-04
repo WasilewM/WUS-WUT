@@ -1,0 +1,74 @@
+rg_name: config-2-rg
+network_sec_groups:
+  nsg1backend:
+    name: "nsg-1-backend"
+    rule:
+      name: "nsg-backend"
+      access: "allow"
+      protocol: "Tcp"
+      priority: 1000
+      src_addr_pref: "*"
+      src_port_ranges: "*"
+      dst_addr_pref: "*"
+      dst_port_ranges: "22-8102"
+  nsg2frontend:
+    name: "nsg-2-frontend"
+    rule:
+      name: "nsg-frontend"
+      access: "allow"
+      protocol: "Tcp"
+      priority: 1000
+      src_addr_pref: "*"
+      src_port_ranges: "*"
+      dst_addr_pref: "*"
+      dst_port_ranges: "22-8001"
+  nsg3ansible:
+    name: "nsg-3-ansible"
+    rule:
+      name: "nsg-ansible"
+      access: "allow"
+      protocol: "Tcp"
+      priority: 1000
+      src_addr_pref: "*"
+      src_port_ranges: "*"
+      dst_addr_pref: "*"
+      dst_port_ranges: "22"
+  
+subnets:
+  subnet1backend:
+    name: "subnet-1-backend"
+    addr_pref: "10.0.1.0/24"
+    nsg: "nsg-1-backend"
+  subnet2frontend:
+    name: "subnet-2-frontend"
+    addr_pref: "10.0.2.0/24"
+    nsg: "nsg-2-frontend"
+  subnet3ansible:
+    name: "subnet-3-ansible"
+    addr_pref: "10.0.3.0/24"
+    nsg: "nsg-3-ansible"
+
+public_ips:
+  - backend_ip
+  - frontend_ip
+  - ansible_ip
+
+vms:
+  backend:
+    subnet: "subnet-1-backend"
+    nsg: "nsg-1-backend"
+    public_ip: "backend_ip"
+    name: "vm-1-backend" 
+    IP: "10.0.1.20"
+  frontend:
+    subnet: "subnet-2-frontend"
+    nsg: "nsg-2-frontend"
+    public_ip: "frontend_ip"
+    name: "vm-2-frontend"
+    IP: "10.0.2.20"
+  ansible:
+    subnet: "subnet-3-ansible"
+    nsg: "nsg-3-ansible"
+    public_ip: "ansible_ip"
+    name: "vm-3-ansible"
+    IP: "10.0.3.20"

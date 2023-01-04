@@ -1,26 +1,40 @@
 - name: Deploy database
-  hosts: host1  # @TODO check if renaming to host-db possible
+  hosts: host1
   tasks:
     - include_vars: config_1.yaml
     - name: Run database.sh
       ansible.builtin.script:
-        cmd: scripts/database.sh {{ port }}
-        # @TODO is db-vm IP needed?
+        cmd: scripts/database.sh {{ db_port }}
 
 - name: Deploy backend
-  hosts: host2  # @TODO check if renaming to host-backend possible
+  hosts: host1
   tasks:
     - include_vars: config_1.yaml
-      name: Run backend.sh
-      ansible.buildin.script:
-        cmd: scripts/backend {{ backend_port }} {{ db_ip }} {{ db_port }}
-        # @TODO is backend-vm IP needed?
+    - name: Clone a github repository
+      git:
+        repo: https://github.com/spring-petclinic/spring-petclinic-rest.git
+        dest: ~/backend/spring-petclinic-rest
+        clone: yes
+        update: yes
+    - name: Run backend.sh
+      ansible.builtin.script:
+        cmd: scripts/backend.sh {{ backend_port }} {{ db_ip }} {{ db_port }}
+    - name: Start backend
+      shell: cd ~/backend/spring-petclinic-rest; nohup ./mvnw spring-boot:run &
 
 - name: Deploy frontend
-  hosts: host3  # @TODO check if renaming to host-frontend possible
+  hosts: host2
   tasks:
     - include_vars: config_1.yaml
+    - name: Clone a github repository
+      git:
+        repo: https://github.com/spring-petclinic/spring-petclinic-angular.git
+        dest: ~/frontend/spring-petclinic-angular
+        clone: yes
+        update: yes
     - name: Run frontend.sh
       ansible.builtin.script:
         cmd: scripts/frontend.sh {{ backend_ip }} {{ backend_port }} {{ frontend_port }}
-        # @TODO is frontend-vm IP needed?
+    - name: Start backend
+      shell: cd ~/frontend/spring-petclinic-angular; nohup npx angular-http-server --path ./dist -p {{ frontend_port }} > angular.out 2> angular.err &
+

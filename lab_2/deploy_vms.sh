@@ -3,6 +3,8 @@ source parse_yaml.sh
 
 eval $(parse_yaml $1)
 
+# echo $vms_
+
 az group create --location westeurope --name $rg_name
 
 az network vnet create \
