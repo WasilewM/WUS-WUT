@@ -8,6 +8,12 @@ port=$1
 # 	sudo rm -rf ./database
 # fi
 
+echo "sudo mysql -e DROP USER pc;"
+sudo mysql -e "DROP USER pc;"
+
+echo "sudo mysql -e DROP DATABASE petclinic;"
+sudo mysql -e "DROP DATABASE petclinic;"
+
 if [ ! -d ./database ]
 then
 	echo "Create new ./database directory"
