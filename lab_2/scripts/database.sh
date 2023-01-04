@@ -14,6 +14,12 @@ sudo mysql -e "DROP USER pc;"
 echo "sudo mysql -e DROP DATABASE petclinic;"
 sudo mysql -e "DROP DATABASE petclinic;"
 
+echo "sudo mysql -e DROP USER pc;"
+sudo mysql -e "DROP USER pc;"
+
+echo "sudo mysql -e DROP DATABASE petclinic;"
+sudo mysql -e "DROP DATABASE petclinic;"
+
 if [ ! -d ./database ]
 then
 	echo "Create new ./database directory"
