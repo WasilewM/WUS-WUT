@@ -19,6 +19,8 @@
     - name: Run backend.sh
       ansible.builtin.script:
         cmd: scripts/backend.sh {{ backend_1_port }} {{ db_ip }} {{ db_port }}
+    - name: Start backend
+      shell: cd ~/backend/spring-petclinic-rest; nohup ./mvnw spring-boot:run &
 
 - name: Deploy backend 2
   hosts: host1
@@ -27,6 +29,8 @@
     - name: Run backend.sh
       ansible.builtin.script:
         cmd: scripts/backend.sh {{ backend_2_port }} {{ db_ip }} {{ db_port }}
+    - name: Start backend
+      shell: cd ~/backend/spring-petclinic-rest; nohup ./mvnw spring-boot:run &
 
 - name: Deploy backend 3
   hosts: host1
@@ -35,6 +39,8 @@
     - name: Run backend.sh
       ansible.builtin.script:
         cmd: scripts/backend.sh {{ backend_3_port }} {{ db_ip }} {{ db_port }}
+    - name: Start backend
+      shell: cd ~/backend/spring-petclinic-rest; nohup ./mvnw spring-boot:run &
 
 - name: Deploy load balancer
   hosts: host2
@@ -58,3 +64,5 @@
     - name: Run frontend.sh
       ansible.builtin.script:
         cmd: scripts/frontend.sh {{ load_balancer_ip }} {{ load_balancer_port }} {{ frontend_port }}
+    - name: Start backend
+      shell: cd ~/frontend/spring-petclinic-angular; nohup npx angular-http-server --path ./dist -p {{ frontend_port }} > angular.out 2> angular.err &
