@@ -11,7 +11,7 @@ az group create --name $RESOURCE_GROUP_NAME --location westeurope
 az aks create --resource-group $RESOURCE_GROUP_NAME \
     --name $CLUSTER_NAME \
     --enable-managed-identity \
-    --node-cout 2 \
+    --node-count 2 \
     --generate-ssh-keys
 
 kubectl get nodes
