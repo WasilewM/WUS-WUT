@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# before running the script please log in:
-# azure login
-# and enter displayed code in the website from provided link
-
 RESOURCE_GROUP_NAME=$1
 CLUSTER_NAME=$2
 
