@@ -24,7 +24,7 @@ az aks get-credentials \
 kubectl get nodes
 
 # deploy spring-petclinic-cloud
-cd spring-petclinic-k8s/
+cd spring-petclinic-cloud/
 
 kubectl apply -f k8s/init-namespace
 kubectl apply -f k8s/init-services
